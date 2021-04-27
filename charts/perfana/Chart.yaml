@@ -1,8 +1,0 @@
-apiVersion: v2
-appVersion: 2.30.3
-description: Perfana front end
-name: perfana-fe
-version: 1.0.0
-maintainers:
-  - name: Daniel Moll
-    email: daniel@perfana.io
