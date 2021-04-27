@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: perfana-fe
+  labels:
+    app: perfana-fe
+    chart: {{ include "perfana.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.perfanaFe.replicaCount }}
+  selector:
+    matchLabels:
+      app: perfana-fe
+      release: {{ .Release.Name }}
+  strategy:
+    type: {{ .Values.perfanaFe.deploymentStrategy }}
+  {{- if ne .Values.perfanaFe.deploymentStrategy "RollingUpdate" }}
+    rollingUpdate: null
+  {{- end }}
+  template:
+    metadata:
+      labels:
+        app: perfana-fe
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: perfana-fe
+          image: "{{ .Values.perfanaFe.image.repository }}:{{ .Values.perfanaFe.image.tag }}"
+          imagePullPolicy: {{ .Values.perfanaFe.image.pullPolicy }}
+          ports:
+            - name: {{ .Values.perfanaFe.service.targetPort }}
+              containerPort: {{ .Values.perfanaFe.service.port }}
+              protocol: TCP
+          livenessProbe:
+           failureThreshold: 8
+           httpGet:
+            path: /perfana
+            port: 3000
+            scheme: HTTP
+           initialDelaySeconds: 45
+           periodSeconds: 10
+           successThreshold: 1
+           timeoutSeconds: 5
+          readinessProbe:
+           failureThreshold: 3
+           httpGet:
+            path: /perfana
+            port: 3000
+            scheme: HTTP
+           initialDelaySeconds: 45
+           periodSeconds: 10
+           successThreshold: 1
+           timeoutSeconds: 5
+          env: # ENV variables for your project
+            - name: MONGO_URL
+              valueFrom: # value from previosly created Secret
+                secretKeyRef:
+                  key: MONGO_URL
+                  name: mongo-url
+            - name: MONGO_OPLOG_URL
+              valueFrom: # value from previosly created Secret
+                secretKeyRef:
+                  key: MONGO_OPLOG_URL
+                  name: mongo-oplog-url
+            - name: METEOR_SETTINGS
+              valueFrom: # value from previosly created Secret
+                secretKeyRef:
+                  key: METEOR_SETTINGS
+                  name: meteor-settings
+        {{- range $key, $value := .Values.perfanaFe.env }}
+            - name: {{ $key }}
+              value: '{{ $value }}'
+        {{- end }}
+          resources:
+{{ toYaml .Values.perfanaFe.resources | indent 12 }}
+    {{- with .Values.perfanaFe.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.perfanaFe.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.perfanaFe.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

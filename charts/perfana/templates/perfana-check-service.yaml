@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: perfana-check
+  labels:
+    app: perfana-check
+    chart: {{ include "perfana.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.perfanaCheck.service.type }}
+  ports:
+    - port: {{ .Values.perfanaCheck.service.port }}
+      targetPort: {{ .Values.perfanaCheck.service.targetPort }}
+      protocol: TCP
+      name: http
+   
+      
+  selector:
+    app: perfana-check
+    release: {{ .Release.Name }}

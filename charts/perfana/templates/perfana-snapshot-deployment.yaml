@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: perfana-snapshot
+  labels:
+    app: perfana-snapshot
+    chart: {{ include "perfana.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.perfanaSnapshot.replicaCount }}
+  selector:
+    matchLabels:
+      app: perfana-snapshot
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: perfana-snapshot
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: perfana-snapshot
+          image: "{{ .Values.perfanaSnapshot.image.repository }}:{{ .Values.perfanaSnapshot.image.tag }}"
+          imagePullPolicy: {{ .Values.perfanaSnapshot.image.pullPolicy }}
+       
+          # livenessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          # readinessProbe:
+          #   httpGet:
+          #     path: /
+          #     port: http
+          env: # ENV variables for your project
+          - name: MONGO_URL
+            valueFrom:
+              secretKeyRef:
+                key: MONGO_URL
+                name: mongo-url
+          resources:
+{{ toYaml .Values.perfanaSnapshot.resources | indent 12 }}
+    {{- with .Values.perfanaSnapshot.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.perfanaSnapshot.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.perfanaSnapshot.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+{{- if .Values.perfanaFe.service.annotations }}
+  annotations:
+{{ toYaml .Values.perfanaFe.service.annotations | indent 4 }}
+{{- end }}
+  name: perfana-fe
+  labels:
+    app: perfana-fe
+    chart: {{ include "perfana.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  type: {{ .Values.perfanaFe.service.type }}
+  ports:
+    - port: {{ .Values.perfanaFe.service.port }}
+      targetPort:  {{ .Values.perfanaFe.service.targetPort }}
+      protocol: TCP
+      name: http
+  selector:
+    app: perfana-fe
+    release: {{ .Release.Name }}
