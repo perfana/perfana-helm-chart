@@ -3,7 +3,19 @@ entries:
   perfana:
   - apiVersion: v1
     appVersion: 2.30.3
-    created: "2021-04-29T15:48:02.879579157+02:00"
+    created: "2021-05-04T15:48:20.273000325+02:00"
+    description: Perfana front end
+    digest: 8ab00f72728a2142187f88f58ba1ec28d5de253fd9a42600b2662829d32fe468
+    maintainers:
+    - email: daniel@perfana.io
+      name: Daniel Moll
+    name: perfana
+    urls:
+    - https://perfana.github.io/perfana-helm-chart/perfana-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v1
+    appVersion: 2.30.3
+    created: "2021-05-04T15:48:20.27247514+02:00"
     description: Perfana front end
     digest: 92a257b13d0f8c7e45ec8cb436d9b737140ff120f80393e10b384b6e87fee2f3
     maintainers:
@@ -13,4 +25,4 @@ entries:
     urls:
     - https://perfana.github.io/perfana-helm-chart/perfana-1.0.0.tgz
     version: 1.0.0
-generated: "2021-04-29T15:48:02.878937631+02:00"
+generated: "2021-05-04T15:48:20.271685056+02:00"
