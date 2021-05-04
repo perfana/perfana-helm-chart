@@ -1,5 +1,12 @@
 # perfana-fe values.
 
+# use existing secrets, e.g. when using sealed secrets
+# existingSecret:
+#   mongoUrl: mongo-url
+#   mongoOplogUrl: mongo-oplog-url
+#   meteorSettings: meteor-settings
+      
+
 perfanaFe:
 
   replicaCount: 1

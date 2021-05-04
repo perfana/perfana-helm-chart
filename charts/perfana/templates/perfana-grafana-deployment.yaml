@@ -37,7 +37,7 @@ spec:
             valueFrom:
               secretKeyRef:
                 key: MONGO_URL
-                name: mongo-url
+                name: {{ .Values.existingSecret.mongoUrl | default "mongo-url" }}
       {{- range $key, $value := .Values.perfanaGrafana.env }}
           - name: {{ $key }}
             value: '{{ $value }}'

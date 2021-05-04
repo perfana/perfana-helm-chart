@@ -57,17 +57,17 @@ spec:
               valueFrom: # value from previosly created Secret
                 secretKeyRef:
                   key: MONGO_URL
-                  name: mongo-url
+                  name: {{ .Values.existingSecret.mongoUrl | default "mongo-url" }}
             - name: MONGO_OPLOG_URL
               valueFrom: # value from previosly created Secret
                 secretKeyRef:
                   key: MONGO_OPLOG_URL
-                  name: mongo-oplog-url
+                  name: {{ .Values.existingSecret.mongoOplogUrl | default "mongo-oplog-url" }}
             - name: METEOR_SETTINGS
               valueFrom: # value from previosly created Secret
                 secretKeyRef:
                   key: METEOR_SETTINGS
-                  name: meteor-settings
+                  name: {{ .Values.existingSecret.meteorSettings | default "meteor-settings" }}
         {{- range $key, $value := .Values.perfanaFe.env }}
             - name: {{ $key }}
               value: '{{ $value }}'

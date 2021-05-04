@@ -37,7 +37,7 @@ spec:
             valueFrom:
               secretKeyRef:
                 key: MONGO_URL
-                name: mongo-url
+                name: {{ .Values.existingSecret.mongoUrl | default "mongo-url" }}
           resources:
 {{ toYaml .Values.perfanaSnapshot.resources | indent 12 }}
     {{- with .Values.perfanaSnapshot.nodeSelector }}
