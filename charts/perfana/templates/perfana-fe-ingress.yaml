@@ -1,6 +1,6 @@
 {{- if .Values.perfanaFe.ingress.enabled -}}
 {{- $ingressPath := .Values.perfanaFe.ingress.path -}}
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: perfana-fe
@@ -25,13 +25,18 @@ spec:
   {{- end }}
 {{- end }}
   rules:
-  {{- range .Values.perfanaFe.ingress.hosts }}
+    {{- range .Values.perfanaFe.ingress.hosts }}
     - host: {{ .host | quote }}
       http:
         paths:
-          - path: {{ $ingressPath }}
+          {{- range .paths }}
+          - path: {{ .path }}
+            pathType: {{ .pathType }}
             backend:
-              serviceName: perfana-fe
-              servicePort: http
-  {{- end }}
+              service:
+                name: perfana-fe
+                port:
+                  name: http
+          {{- end }}
+    {{- end }}
 {{- end }}
