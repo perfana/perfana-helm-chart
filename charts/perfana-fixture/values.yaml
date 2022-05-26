@@ -1,0 +1,15 @@
+#existingSecret:
+#  mongoUrl: mongo-url
+replicaCount: 1
+image:
+  repository: perfana/perfana-fixture
+  tag: perfana-2.2.1
+  pullPolicy: Always
+# optional image pull secret
+#imagePullSecrets:
+#- name: regcred
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}
+env: {}

@@ -1,0 +1,8 @@
+apiVersion: v1
+appVersion: 2.2.1
+description: Perfana Performance Hub
+name: perfana-fixture
+version: 1.0.0
+maintainers:
+  - name: Perfana Dev Team
+    email: support@perfana.io
