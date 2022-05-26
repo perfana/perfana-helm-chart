@@ -19,6 +19,10 @@ spec:
         app: perfana-check
         release: {{ .Release.Name }}
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: perfana-check
           image: "{{ .Values.perfanaCheck.image.repository }}:{{ .Values.perfanaCheck.image.tag }}"
@@ -40,7 +44,11 @@ spec:
             valueFrom:
               secretKeyRef:
                 key: MONGO_URL
-                name: {{ .Values.existingSecret.mongoUrl | default "mongo-url" }}
+                {{- if not .Values.existingSecret.mongoUrl }}
+                name: mongo-url
+                {{- else }}
+                name: {{ .Values.existingSecret.mongoUrl }}
+                {{- end}}
       {{- range $key, $value := .Values.perfanaCheck.env }}
           - name: {{ $key }}
             value: '{{ $value }}'

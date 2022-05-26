@@ -5,7 +5,11 @@
 #  mongoUrl: mongo-url
 #  mongoOplogUrl: mongo-oplog-url
 #  meteorSettings: meteor-settings
-    
+
+# optional image pull secret
+imagePullSecrets:
+  - name: regcred
+
 perfanaFe:
   replicaCount: 1
   image:

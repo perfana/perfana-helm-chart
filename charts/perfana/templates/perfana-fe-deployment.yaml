@@ -24,6 +24,10 @@ spec:
         app: perfana-fe
         release: {{ .Release.Name }}
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: perfana-fe
           image: "{{ .Values.perfanaFe.image.repository }}:{{ .Values.perfanaFe.image.tag }}"
@@ -54,20 +58,32 @@ spec:
            timeoutSeconds: 5
           env: # ENV variables for your project
             - name: MONGO_URL
-              valueFrom: # value from previosly created Secret
+              valueFrom:
                 secretKeyRef:
                   key: MONGO_URL
-                  name: {{ .Values.existingSecret.mongoUrl | default "mongo-url" }}
+                  {{- if not .Values.existingSecret.mongoUrl }}
+                  name: mongo-url
+                  {{- else }}
+                  name: {{ .Values.existingSecret.mongoUrl }}
+                  {{- end }}
             - name: MONGO_OPLOG_URL
-              valueFrom: # value from previosly created Secret
+              valueFrom:
                 secretKeyRef:
-                  key: MONGO_OPLOG_URL
-                  name: {{ .Values.existingSecret.mongoOplogUrl | default "mongo-oplog-url" }}
+                   key: MONGO_OPLOG_URL
+                  {{- if not .Values.existingSecret.mongoOplogUrl }}
+                   name: mongo-oplog-url
+                  {{- else }}
+                   name: {{ .Values.existingSecret.mongoOplogUrl }}
+                  {{- end }}
             - name: METEOR_SETTINGS
-              valueFrom: # value from previosly created Secret
+              valueFrom:
                 secretKeyRef:
-                  key: METEOR_SETTINGS
-                  name: {{ .Values.existingSecret.meteorSettings | default "meteor-settings" }}
+                   key: METEOR_SETTINGS
+                  {{- if not .Values.existingSecret.meteorSettings }}
+                   name: meteor-settings
+                  {{- else }}
+                   name: {{ .Values.existingSecret.meteorSettings }}
+                  {{- end }}
         {{- range $key, $value := .Values.perfanaFe.env }}
             - name: {{ $key }}
               value: '{{ $value }}'

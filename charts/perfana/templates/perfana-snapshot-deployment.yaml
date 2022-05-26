@@ -19,6 +19,10 @@ spec:
         app: perfana-snapshot
         release: {{ .Release.Name }}
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: perfana-snapshot
           image: "{{ .Values.perfanaSnapshot.image.repository }}:{{ .Values.perfanaSnapshot.image.tag }}"
@@ -37,7 +41,11 @@ spec:
             valueFrom:
               secretKeyRef:
                 key: MONGO_URL
-                name: {{ .Values.existingSecret.mongoUrl | default "mongo-url" }}
+                {{- if not .Values.existingSecret.mongoUrl }}
+                name: mongo-url
+                {{- else }}
+                name: {{ .Values.existingSecret.mongoUrl }}
+                {{- end }}
           resources:
 {{ toYaml .Values.perfanaSnapshot.resources | indent 12 }}
     {{- with .Values.perfanaSnapshot.nodeSelector }}

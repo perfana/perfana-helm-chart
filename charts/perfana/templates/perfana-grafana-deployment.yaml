@@ -19,6 +19,10 @@ spec:
         app: perfana-grafana
         release: {{ .Release.Name }}
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: perfana-grafana
           image: "{{ .Values.perfanaGrafana.image.repository }}:{{ .Values.perfanaGrafana.image.tag }}"
@@ -37,7 +41,11 @@ spec:
             valueFrom:
               secretKeyRef:
                 key: MONGO_URL
-                name: {{ .Values.existingSecret.mongoUrl | default "mongo-url" }}
+                {{- if not .Values.existingSecret.mongoUrl }}
+                name: mongo-url
+                {{- else }}
+                name: {{ .Values.existingSecret.mongoUrl }}
+                {{- end }}
       {{- range $key, $value := .Values.perfanaGrafana.env }}
           - name: {{ $key }}
             value: '{{ $value }}'
