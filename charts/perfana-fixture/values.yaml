@@ -3,7 +3,7 @@
 replicaCount: 1
 image:
   repository: perfana/perfana-fixture
-  tag: perfana-2.2.1
+  tag: perfana-2.3.0
   pullPolicy: Always
 # optional image pull secret
 #imagePullSecrets:
