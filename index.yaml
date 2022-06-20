@@ -2,6 +2,18 @@ apiVersion: v1
 entries:
   perfana:
   - apiVersion: v1
+    appVersion: perfana-2.3.0
+    created: "2022-06-20T13:20:56.356668149Z"
+    description: Perfana Performance Hub
+    digest: 05a04050672c9106560c38bfe8e7f8e09cb87a1cd3c23902a552983c852f6e06
+    maintainers:
+    - email: support@perfana.io
+      name: Perfana Dev Team
+    name: perfana
+    urls:
+    - https://github.com/perfana/perfana-helm-chart/releases/download/perfana-1.6.0/perfana-1.6.0.tgz
+    version: 1.6.0
+  - apiVersion: v1
     appVersion: 2.2.1
     created: "2022-05-26T09:49:49.630355198Z"
     description: Perfana Performance Hub
@@ -87,6 +99,18 @@ entries:
     version: 1.0.0
   perfana-fixture:
   - apiVersion: v1
+    appVersion: perfana-2.3.0
+    created: "2022-06-20T13:20:56.512449041Z"
+    description: Perfana Performance Hub
+    digest: 0fcf69f062ddafc69113d1f0738f1cd9240bb787fa848aa17e6980161e674791
+    maintainers:
+    - email: support@perfana.io
+      name: Perfana Dev Team
+    name: perfana-fixture
+    urls:
+    - https://github.com/perfana/perfana-helm-chart/releases/download/perfana-fixture-1.1.0/perfana-fixture-1.1.0.tgz
+    version: 1.1.0
+  - apiVersion: v1
     appVersion: 2.2.1
     created: "2022-05-26T09:49:49.741332468Z"
     description: Perfana Performance Hub
@@ -98,4 +122,4 @@ entries:
     urls:
     - https://github.com/perfana/perfana-helm-chart/releases/download/perfana-fixture-1.0.0/perfana-fixture-1.0.0.tgz
     version: 1.0.0
-generated: "2022-05-26T09:49:49.741370668Z"
+generated: "2022-06-20T13:20:56.512485742Z"
