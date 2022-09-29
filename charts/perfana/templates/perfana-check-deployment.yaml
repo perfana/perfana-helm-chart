@@ -1,3 +1,4 @@
+{{- if .Values.perfanaCheck.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -7,6 +8,12 @@ metadata:
     chart: {{ include "perfana.chart" . }}
     release: {{ .Release.Name }}
     heritage: {{ .Release.Service }}
+    {{- with .Values.perfanaCheck.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- if .Values.perfanaCheck.annotations }}
+  annotations: {{ toYaml .Values.perfanaCheck.annotations | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ .Values.perfanaCheck.replicaCount }}
   selector:
@@ -67,3 +74,4 @@ spec:
       tolerations:
 {{ toYaml . | indent 8 }}
     {{- end }}
+{{- end }}
