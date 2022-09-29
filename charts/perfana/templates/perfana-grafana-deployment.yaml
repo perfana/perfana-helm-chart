@@ -20,6 +20,9 @@ spec:
         app: perfana-grafana
         release: {{ .Release.Name }}
     spec:
+      {{- if .Values.perfanaGrafana.serviceAccount.enabled }}
+      serviceAccountName: {{ .Values.perfanaGrafana.serviceAccount.name }}
+      {{- end}}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}

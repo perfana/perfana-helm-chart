@@ -26,6 +26,9 @@ spec:
         app: perfana-check
         release: {{ .Release.Name }}
     spec:
+      {{- if .Values.perfanaCheck.serviceAccount.enabled }}
+      serviceAccountName: {{ .Values.perfanaCheck.serviceAccount.name }}
+      {{- end}}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}

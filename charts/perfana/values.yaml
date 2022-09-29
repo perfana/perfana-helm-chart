@@ -54,6 +54,9 @@ perfanaFe:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+  serviceAccount:
+    enabled: false
+    name: perfana-fe
 
 perfanaGrafana:
   enabled: true
@@ -79,6 +82,9 @@ perfanaGrafana:
   ## Sync interval
   env:
     SYNC_INTERVAL: 30000  # 30 seconds
+  serviceAccount:
+    enabled: false
+    name: perfana-grafana
   
 perfanaCheck:
   enabled: true
@@ -111,6 +117,9 @@ perfanaCheck:
   env: 
     SPRING_PROFILES_ACTIVE: "prd"
     JAVA_TOOL_OPTIONS: -Dlogging.level.root=INFO
+  serviceAccount:
+    enabled: false
+    name: perfana-check
 
 perfanaSnapshot:
   enabled: true
@@ -133,4 +142,7 @@ perfanaSnapshot:
   nodeSelector: {}
   tolerations: []
   affinity: {}
+  serviceAccount:
+    enabled: false
+    name: perfana-snapshot
 
