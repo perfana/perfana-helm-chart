@@ -12,4 +12,3 @@ helm repo add perfana https://perfana.github.io/perfana-helm-chart
 ```
 
 You can then run `helm search repo perfana` to see the charts.
-
