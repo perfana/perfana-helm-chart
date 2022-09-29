@@ -11,6 +11,7 @@ imagePullSecrets:
   - name: regcred
 
 perfanaFe:
+  enabled: true
   replicaCount: 1
   image:
     repository: perfana/perfana-fe
@@ -55,6 +56,7 @@ perfanaFe:
   affinity: {}
 
 perfanaGrafana:
+  enabled: true
   replicaCount: 1
   image:
     repository: perfana/perfana-grafana
@@ -79,11 +81,14 @@ perfanaGrafana:
     SYNC_INTERVAL: 30000  # 30 seconds
   
 perfanaCheck:
+  enabled: true
   replicaCount: 1
   image:
     repository: perfana/perfana-check
     tag: perfana-2.3.0
     pullPolicy: Always
+  labels: {}
+  annotations: {}
   service:
     type: ClusterIP
     port: 9191
@@ -108,6 +113,7 @@ perfanaCheck:
     JAVA_TOOL_OPTIONS: -Dlogging.level.root=INFO
 
 perfanaSnapshot:
+  enabled: true
   replicaCount: 1
   image:
     repository: perfana/perfana-snapshot

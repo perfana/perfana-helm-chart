@@ -1,3 +1,4 @@
+{{- if .Values.perfanaFe.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -21,3 +22,4 @@ spec:
   selector:
     app: perfana-fe
     release: {{ .Release.Name }}
+{{- end }}

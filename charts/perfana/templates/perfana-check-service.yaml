@@ -1,3 +1,4 @@
+{{- if .Values.perfanaCheck.enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
@@ -14,8 +15,7 @@ spec:
       targetPort: {{ .Values.perfanaCheck.service.targetPort }}
       protocol: TCP
       name: http
-   
-      
   selector:
     app: perfana-check
     release: {{ .Release.Name }}
+{{- end }}
