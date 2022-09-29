@@ -20,6 +20,9 @@ spec:
         app: perfana-snapshot
         release: {{ .Release.Name }}
     spec:
+      {{- if .Values.perfanaSnapshot.serviceAccount.enabled }}
+      serviceAccountName: {{ .Values.perfanaSnapshot.serviceAccount.name }}
+      {{- end}}
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
