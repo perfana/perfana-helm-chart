@@ -50,6 +50,7 @@ spec:
           #     path: /
           #     port: http
           env: # ENV variables for your project
+          {{- if .Values.perfanaCheck.setEnvSpringDataMongoDBURI }}
           - name: SPRING_DATA_MONGODB_URI
             valueFrom:
               secretKeyRef:
@@ -59,6 +60,7 @@ spec:
                 {{- else }}
                 name: {{ .Values.existingSecret.mongoUrl }}
                 {{- end}}
+          {{- end}}
       {{- range $key, $value := .Values.perfanaCheck.env }}
           - name: {{ $key }}
             value: '{{ $value }}'

@@ -48,6 +48,7 @@ perfanaFe:
     #  cpu: 1
     #  memory: 512Mi
   ## Environment variables
+  setEnvSpringDataMongoDBURI: true
   env:
     ROOT_URL: http://localhost:4000
     PORT: 3000
@@ -80,6 +81,7 @@ perfanaGrafana:
   tolerations: []
   affinity: {}
   ## Sync interval
+  setEnvSpringDataMongoDBURI: true
   env:
     SYNC_INTERVAL: 30000  # 30 seconds
   serviceAccount:
@@ -114,6 +116,7 @@ perfanaCheck:
   tolerations: []
   affinity: {}
   ## Environment variables
+  setEnvSpringDataMongoDBURI: true
   env: 
     SPRING_PROFILES_ACTIVE: "prd"
     JAVA_TOOL_OPTIONS: -Dlogging.level.root=INFO
@@ -145,4 +148,4 @@ perfanaSnapshot:
   serviceAccount:
     enabled: false
     name: perfana-snapshot
-
+  setEnvSpringDataMongoDBURI: true

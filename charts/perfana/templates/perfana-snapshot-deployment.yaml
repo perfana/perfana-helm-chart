@@ -41,6 +41,7 @@ spec:
           #     path: /
           #     port: http
           env: # ENV variables for your project
+          {{- if .Values.perfanaSnapshot.setEnvSpringDataMongoDBURI }}
           - name: MONGO_URL
             valueFrom:
               secretKeyRef:
@@ -50,6 +51,7 @@ spec:
                 {{- else }}
                 name: {{ .Values.existingSecret.mongoUrl }}
                 {{- end }}
+          {{- end}}
           resources:
 {{ toYaml .Values.perfanaSnapshot.resources | indent 12 }}
     {{- with .Values.perfanaSnapshot.nodeSelector }}

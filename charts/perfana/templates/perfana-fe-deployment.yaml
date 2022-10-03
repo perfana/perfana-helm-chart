@@ -61,6 +61,17 @@ spec:
            successThreshold: 1
            timeoutSeconds: 5
           env: # ENV variables for your project
+            {{- if .Values.perfanaFe.setEnvSpringDataMongoDBURI }}
+            - name: SPRING_DATA_MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  key: MONGO_URL
+                  {{- if not .Values.existingSecret.mongoUrl }}
+                  name: mongo-url
+                  {{- else }}
+                  name: {{ .Values.existingSecret.mongoUrl }}
+                  {{- end }}
+            {{- end }}
             - name: MONGO_URL
               valueFrom:
                 secretKeyRef:
