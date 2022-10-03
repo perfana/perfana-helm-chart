@@ -19,6 +19,12 @@ spec:
       labels:
         app: perfana-grafana
         release: {{ .Release.Name }}
+        {{- with .Values.perfanaGrafana.labels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.perfanaGrafana.annotations }}
+      annotations: {{ toYaml .Values.perfanaGrafana.annotations | nindent 8 }}
+      {{- end }}
     spec:
       {{- if .Values.perfanaGrafana.serviceAccount.enabled }}
       serviceAccountName: {{ .Values.perfanaGrafana.serviceAccount.name }}

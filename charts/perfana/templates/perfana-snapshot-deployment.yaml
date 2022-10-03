@@ -19,6 +19,12 @@ spec:
       labels:
         app: perfana-snapshot
         release: {{ .Release.Name }}
+        {{- with .Values.perfanaSnapshot.labels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.perfanaSnapshot.annotations }}
+      annotations: {{ toYaml .Values.perfanaSnapshot.annotations | nindent 8 }}
+      {{- end }}
     spec:
       {{- if .Values.perfanaSnapshot.serviceAccount.enabled }}
       serviceAccountName: {{ .Values.perfanaSnapshot.serviceAccount.name }}

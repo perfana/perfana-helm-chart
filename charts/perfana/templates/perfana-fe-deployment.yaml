@@ -24,6 +24,12 @@ spec:
       labels:
         app: perfana-fe
         release: {{ .Release.Name }}
+        {{- with .Values.perfanaFe.labels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.perfanaFe.annotations }}
+      annotations: {{ toYaml .Values.perfanaFe.annotations | nindent 8 }}
+      {{- end }}
     spec:
       {{- if .Values.perfanaFe.serviceAccount.enabled }}
       serviceAccountName: {{ .Values.perfanaFe.serviceAccount.name }}
