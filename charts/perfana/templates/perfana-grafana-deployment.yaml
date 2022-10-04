@@ -19,6 +19,12 @@ spec:
       labels:
         app: perfana-grafana
         release: {{ .Release.Name }}
+        {{- with .Values.perfanaGrafana.labels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- if .Values.perfanaGrafana.annotations }}
+      annotations: {{ toYaml .Values.perfanaGrafana.annotations | nindent 8 }}
+      {{- end }}
     spec:
       {{- if .Values.perfanaGrafana.serviceAccount.enabled }}
       serviceAccountName: {{ .Values.perfanaGrafana.serviceAccount.name }}
@@ -41,8 +47,7 @@ spec:
           #     path: /
           #     port: http
           env: # ENV variables for your project
-          {{- if .Values.perfanaGrafana.setEnvSpringDataMongoDBURI }}
-          - name: SPRING_DATA_MONGODB_URI
+          - name: MONGO_URL
             valueFrom:
               secretKeyRef:
                 key: MONGO_URL
@@ -51,7 +56,6 @@ spec:
                 {{- else }}
                 name: {{ .Values.existingSecret.mongoUrl }}
                 {{- end }}
-          {{- end}}
       {{- range $key, $value := .Values.perfanaGrafana.env }}
           - name: {{ $key }}
             value: '{{ $value }}'
