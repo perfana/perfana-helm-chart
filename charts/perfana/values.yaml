@@ -15,7 +15,7 @@ perfanaFe:
   replicaCount: 1
   image:
     repository: perfana/perfana-fe
-    tag: perfana-2.4.0
+    tag: perfana-2.4.1
     pullPolicy: Always
   deploymentStrategy: RollingUpdate
   service:
@@ -63,7 +63,7 @@ perfanaGrafana:
   replicaCount: 1
   image:
     repository: perfana/perfana-grafana
-    tag: perfana-2.4.0
+    tag: perfana-2.4.1
     pullPolicy: Always
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
@@ -99,7 +99,7 @@ perfanaCheck:
   replicaCount: 1
   image:
     repository: perfana/perfana-check
-    tag: perfana-2.4.0
+    tag: perfana-2.4.1
     pullPolicy: Always
   labels: {}
   annotations: {}
@@ -134,7 +134,7 @@ perfanaSnapshot:
   replicaCount: 1
   image:
     repository: perfana/perfana-snapshot
-    tag: perfana-2.4.0
+    tag: perfana-2.4.1
     pullPolicy: Always
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
@@ -153,4 +153,3 @@ perfanaSnapshot:
   serviceAccount:
     enabled: false
     name: perfana-snapshot
-
