@@ -59,7 +59,13 @@ spec:
       {{- range $key, $value := .Values.perfanaGrafana.env }}
           - name: {{ $key }}
             value: '{{ $value }}'
-      {{- end }}    
+      {{- end }}
+
+      {{- range .Values.perfanaGrafana.envFromSecrets }}
+          {{print "- " (. | toYaml | nindent 12 | trim) }}
+      {{- end }}
+
+
           resources:
 {{ toYaml .Values.perfanaGrafana.resources | indent 12 }}
     {{- with .Values.perfanaGrafana.nodeSelector }}

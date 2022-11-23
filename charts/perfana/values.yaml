@@ -1,7 +1,7 @@
 # perfana component values.
 
 # use existing secrets, e.g. when using sealed secrets
-#existingSecret:
+# existingSecret:
 #  mongoUrl: mongo-url
 #  mongoOplogUrl: mongo-oplog-url
 #  meteorSettings: meteor-settings
@@ -82,6 +82,14 @@ perfanaGrafana:
   ## Sync interval
   env:
     SYNC_INTERVAL: 30000  # 30 seconds
+    MYSQL_HOST: mysql-headless
+    MYSQL_USER: grafana
+  envFromSecrets:
+  - name: MYSQL_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        key: mysql-password
+        name: mysql-credentials
   serviceAccount:
     enabled: false
     name: perfana-grafana

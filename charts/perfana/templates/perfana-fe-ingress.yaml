@@ -15,6 +15,9 @@ metadata:
 {{ toYaml . | nindent 4 }}
 {{- end }}
 spec:
+  {{- if .Values.perfanaFe.ingress.ingressClassName }}
+  ingressClassName: {{ .Values.perfanaFe.ingress.ingressClassName }}
+  {{- end }}
 {{- if .Values.perfanaFe.ingress.tls }}
   tls:
   {{- range .Values.perfanaFe.ingress.tls }}
