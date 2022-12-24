@@ -37,6 +37,10 @@ spec:
         - name: perfana-grafana
           image: "{{ .Values.perfanaGrafana.image.repository }}:{{ .Values.perfanaGrafana.image.tag }}"
           imagePullPolicy: {{ .Values.perfanaGrafana.image.pullPolicy }}
+          {{- with .Values.perfanaGrafana.command }}
+          command:
+          {{ toYaml . | nindent 10 }}
+          {{- end}}
        
           # livenessProbe:
           #   httpGet:

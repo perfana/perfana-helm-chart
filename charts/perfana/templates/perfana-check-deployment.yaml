@@ -37,6 +37,10 @@ spec:
         - name: perfana-check
           image: "{{ .Values.perfanaCheck.image.repository }}:{{ .Values.perfanaCheck.image.tag }}"
           imagePullPolicy: {{ .Values.perfanaCheck.image.pullPolicy }}
+          {{- with .Values.perfanaCheck.command }}
+          command:
+          {{ toYaml . | nindent 10 }}
+          {{- end}}
           ports:
             - name: {{ .Values.perfanaCheck.service.targetPort }}
               containerPort: {{ .Values.perfanaCheck.service.port }}
