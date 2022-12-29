@@ -50,16 +50,14 @@ spec:
           #   httpGet:
           #     path: /
           #     port: http
-          env: # ENV variables for your project
+          env:
+          {{- if .Values.mongoUrl.secretName }}
           - name: MONGO_URL
             valueFrom:
               secretKeyRef:
                 key: MONGO_URL
-                {{- if not .Values.existingSecret.mongoUrl }}
-                name: mongo-url
-                {{- else }}
-                name: {{ .Values.existingSecret.mongoUrl }}
-                {{- end }}
+                name: {{ .Values.mongoUrl.secretName }}
+          {{- end }}
           resources:
 {{ toYaml .Values.perfanaSnapshot.resources | indent 12 }}
     {{- with .Values.perfanaSnapshot.nodeSelector }}
