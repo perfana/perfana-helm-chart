@@ -84,7 +84,6 @@ spec:
                 secretKeyRef:
                   key: MONGO_OPLOG_URL
                   name: {{ .Values.mongoOplogUrl.secretName }}
-                  {{- end }}
             {{- end }}
             {{- if .Values.meteorSettings.secretName }}
             - name: METEOR_SETTINGS
