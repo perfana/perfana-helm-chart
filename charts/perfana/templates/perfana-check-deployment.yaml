@@ -54,19 +54,17 @@ spec:
           #     path: /
           #     port: http
           env: # ENV variables for your project
+          {{- if .Values.mongoUrl.secretName }}
           - name: SPRING_DATA_MONGODB_URI
             valueFrom:
               secretKeyRef:
                 key: MONGO_URL
-                {{- if not .Values.existingSecret.mongoUrl }}
-                name: mongo-url
-                {{- else }}
-                name: {{ .Values.existingSecret.mongoUrl }}
-                {{- end}}
-      {{- range $key, $value := .Values.perfanaCheck.env }}
+                name: {{ .Values.mongoUrl.secretName }}
+          {{- end }}
+          {{- range $key, $value := .Values.perfanaCheck.env }}
           - name: {{ $key }}
             value: '{{ $value }}'
-      {{- end }}    
+          {{- end }}    
           resources:
 {{ toYaml .Values.perfanaCheck.resources | indent 12 }}
     {{- with .Values.perfanaCheck.nodeSelector }}

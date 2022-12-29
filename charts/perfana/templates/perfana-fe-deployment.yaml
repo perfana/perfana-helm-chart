@@ -71,33 +71,28 @@ spec:
            successThreshold: 1
            timeoutSeconds: 5
           env: # ENV variables for your project
+            {{- if .Values.mongoUrl.secretName }}
             - name: MONGO_URL
               valueFrom:
                 secretKeyRef:
                   key: MONGO_URL
-                  {{- if not .Values.existingSecret.mongoUrl }}
-                  name: mongo-url
-                  {{- else }}
-                  name: {{ .Values.existingSecret.mongoUrl }}
-                  {{- end }}
+                  name: {{ .Values.mongoUrl.secretName }}
+            {{- end }}
+            {{- if .Values.mongoOplogUrl.secretName }}
             - name: MONGO_OPLOG_URL
               valueFrom:
                 secretKeyRef:
-                   key: MONGO_OPLOG_URL
-                  {{- if not .Values.existingSecret.mongoOplogUrl }}
-                   name: mongo-oplog-url
-                  {{- else }}
-                   name: {{ .Values.existingSecret.mongoOplogUrl }}
+                  key: MONGO_OPLOG_URL
+                  name: {{ .Values.mongoOplogUrl.secretName }}
                   {{- end }}
+            {{- end }}
+            {{- if .Values.meteorSettings.secretName }}
             - name: METEOR_SETTINGS
               valueFrom:
                 secretKeyRef:
-                   key: METEOR_SETTINGS
-                  {{- if not .Values.existingSecret.meteorSettings }}
-                   name: meteor-settings
-                  {{- else }}
-                   name: {{ .Values.existingSecret.meteorSettings }}
-                  {{- end }}
+                  key: METEOR_SETTINGS
+                  name: {{ .Values.meteorSettings.secretName }}
+            {{- end }}
         {{- range $key, $value := .Values.perfanaFe.env }}
             - name: {{ $key }}
               value: '{{ $value }}'

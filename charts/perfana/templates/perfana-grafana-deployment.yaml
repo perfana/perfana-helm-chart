@@ -51,23 +51,20 @@ spec:
           #     path: /
           #     port: http
           env: # ENV variables for your project
+          {{- if .Values.mongoUrl.secretName }}
           - name: MONGO_URL
             valueFrom:
               secretKeyRef:
                 key: MONGO_URL
-                {{- if not .Values.existingSecret.mongoUrl }}
-                name: mongo-url
-                {{- else }}
-                name: {{ .Values.existingSecret.mongoUrl }}
-                {{- end }}
-      {{- range $key, $value := .Values.perfanaGrafana.env }}
+                name: {{ .Values.mongoUrl.secretName }}
+          {{- end }}
+          {{- range $key, $value := .Values.perfanaGrafana.env }}
           - name: {{ $key }}
             value: '{{ $value }}'
-      {{- end }}
-
-      {{- range .Values.perfanaGrafana.envFromSecrets }}
+          {{- end }}
+          {{- range .Values.perfanaGrafana.envFromSecrets }}
           {{print "- " (. | toYaml | nindent 12 | trim) }}
-      {{- end }}
+          {{- end }}
 
 
           resources:

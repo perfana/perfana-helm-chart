@@ -1,10 +1,16 @@
 # perfana component values.
 
-# use existing secrets, e.g. when using sealed secrets
-# existingSecret:
-#  mongoUrl: mongo-url
-#  mongoOplogUrl: mongo-oplog-url
-#  meteorSettings: meteor-settings
+# If secretName is non-empty, env variable MONGO_URL, MONGO_OPLOG_URL and METEOR_SETTINGS set by secret.
+# If value is non-empty, the secret is also created (otherwise the secret must be already deployed).
+mongoUrl:
+  secretName: mongo-url 
+  value:
+mongoOplogUrl: 
+  secretName: mongo-url
+  value:
+meteorSettings:
+  secretName: meteor-settings
+  value:
 
 # optional image pull secret
 imagePullSecrets:
