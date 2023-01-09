@@ -53,20 +53,20 @@ spec:
           livenessProbe:
            failureThreshold: 8
            httpGet:
-            path: /perfana
+            path: /api/status
             port: 3000
             scheme: HTTP
-           initialDelaySeconds: 45
+           initialDelaySeconds: 30
            periodSeconds: 10
            successThreshold: 1
            timeoutSeconds: 5
           readinessProbe:
            failureThreshold: 3
            httpGet:
-            path: /perfana
+            path: /api/status
             port: 3000
             scheme: HTTP
-           initialDelaySeconds: 45
+           initialDelaySeconds: 30
            periodSeconds: 10
            successThreshold: 1
            timeoutSeconds: 5
