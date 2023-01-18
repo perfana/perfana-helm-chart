@@ -51,13 +51,6 @@ spec:
           #     path: /
           #     port: http
           env: # ENV variables for your project
-          {{- if .Values.mongoUrl.secretName }}
-          - name: MONGO_URL
-            valueFrom:
-              secretKeyRef:
-                key: MONGO_URL
-                name: {{ .Values.mongoUrl.secretName }}
-          {{- end }}
           {{- range $key, $value := .Values.perfanaGrafana.env }}
           - name: {{ $key }}
             value: '{{ $value }}'
@@ -65,10 +58,23 @@ spec:
           {{- range .Values.perfanaGrafana.envFromSecrets }}
           {{print "- " (. | toYaml | nindent 12 | trim) }}
           {{- end }}
-
-
           resources:
 {{ toYaml .Values.perfanaGrafana.resources | indent 12 }}
+          volumeMounts:
+          - name: dot-env
+            mountPath: /env/perfana-mongo-urls.secret.env
+            subPath: perfana-mongo-urls
+      volumes:
+      - name: dot-env
+        projected:
+          sources:
+          - secret:
+              {{- if .Values.dotenvExistingSecret }}
+              name: {{ .Values.dotenvExistingSecret }}
+              {{ else }}
+              name: secret-dotenv
+              {{- end }}
+
     {{- with .Values.perfanaGrafana.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

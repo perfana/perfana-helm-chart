@@ -50,16 +50,24 @@ spec:
           #   httpGet:
           #     path: /
           #     port: http
-          env:
-          {{- if .Values.mongoUrl.secretName }}
-          - name: MONGO_URL
-            valueFrom:
-              secretKeyRef:
-                key: MONGO_URL
-                name: {{ .Values.mongoUrl.secretName }}
-          {{- end }}
+          
           resources:
 {{ toYaml .Values.perfanaSnapshot.resources | indent 12 }}
+          volumeMounts:
+          - name: dot-env
+            mountPath: /env/perfana-mongo-urls.secret.env
+            subPath: perfana-mongo-urls  
+      volumes:
+      - name: dot-env
+        projected:
+          sources:
+          - secret:
+              {{- if .Values.dotenvExistingSecret }}
+              name: {{ .Values.dotenvExistingSecret }}
+              {{ else }}
+              name: secret-dotenv
+              {{- end }}
+
     {{- with .Values.perfanaSnapshot.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
