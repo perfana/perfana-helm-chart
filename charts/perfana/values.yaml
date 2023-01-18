@@ -16,8 +16,8 @@ meteorSettings:
 imagePullSecrets:
   - name: regcred
 
-# securityContext at container-level
 securityContext: {}
+containerSecurityContext: {}
 
 perfanaFe:
   enabled: true
