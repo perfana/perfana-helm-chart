@@ -65,6 +65,10 @@ spec:
                 key: MONGO_URL
                 name: {{ .Values.mongoUrl.secretName }}
           {{- end }}
+          {{- range $key, $value := .Values.perfanaSnapshot.env }}
+          - name: {{ $key }}
+            value: '{{ $value }}'
+          {{- end }}
           resources:
 {{ toYaml .Values.perfanaSnapshot.resources | indent 12 }}
     {{- with .Values.perfanaSnapshot.nodeSelector }}
