@@ -33,6 +33,10 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- with .Values.securityContext }}
+      securityContext:
+      {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - name: perfana-check
           image: "{{ .Values.perfanaCheck.image.repository }}:{{ .Values.perfanaCheck.image.tag }}"
@@ -41,7 +45,7 @@ spec:
           command:
           {{ toYaml . | nindent 10 }}
           {{- end}}
-          {{- with .Values.securityContext }}
+          {{- with .Values.containerSecurityContext }}
           securityContext:
           {{- toYaml . | nindent 12 }}
           {{- end }}
@@ -58,20 +62,17 @@ spec:
           #     path: /
           #     port: http
           env: # ENV variables for your project
-          - name: SPRING_DATA_MONGODB_URI
-            valueFrom:
-              secretKeyRef:
-                key: MONGO_URL
-              {{- if .Values.dotenvExistingSecret }}
-                name: {{ .Values.dotenvExistingSecret }}
-              {{ else }}
-                name: secret-dotenv
-              {{- end }}
-
+          {{- if .Values.mongoUrl.secretName }}
+            - name: SPRING_DATA_MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  key: MONGO_URL
+                  name: {{ .Values.mongoUrl.secretName }}
+          {{- end }}
           {{- range $key, $value := .Values.perfanaCheck.env }}
-          - name: {{ $key }}
-            value: '{{ $value }}'
-          {{- end }}    
+            - name: {{ $key }}
+              value: '{{ $value }}'
+          {{- end }}
           resources:
 {{ toYaml .Values.perfanaCheck.resources | indent 12 }}
     {{- with .Values.perfanaCheck.nodeSelector }}
