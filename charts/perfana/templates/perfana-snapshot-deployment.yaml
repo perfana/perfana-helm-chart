@@ -57,19 +57,17 @@ spec:
           resources:
 {{ toYaml .Values.perfanaSnapshot.resources | indent 12 }}
           volumeMounts:
-          - name: dot-env
-            mountPath: /env/perfana-mongo-urls.secret.env
-            subPath: perfana-mongo-urls  
+          - name: perfana-snapshot-secrets
+            mountPath: /secrets/perfana-mongo-urls-secret.env
+            subPath: perfana-mongo-urls-secret.env 
       volumes:
-      - name: dot-env
+      {{- if .Values.existingSecret }}
+      - name: perfana-snapshot-secrets
         projected:
           sources:
           - secret:
-              {{- if .Values.dotenvExistingSecret }}
-              name: {{ .Values.dotenvExistingSecret }}
-              {{ else }}
-              name: secret-dotenv
-              {{- end }}
+              name: {{ .Values.existingSecret }}       
+      {{- end }}
 
     {{- with .Values.perfanaSnapshot.nodeSelector }}
       nodeSelector:

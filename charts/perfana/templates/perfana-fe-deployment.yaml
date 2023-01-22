@@ -74,7 +74,28 @@ spec:
            periodSeconds: 10
            successThreshold: 1
            timeoutSeconds: 5
-          env: # ENV variables for your project            
+          env: # ENV variables for your project    
+          {{- if .Values.mongoUrl.secretName }}
+            - name: MONGO_URL
+              valueFrom:
+                secretKeyRef:
+                  key: MONGO_URL
+                  name: {{ .Values.mongoUrl.secretName }}
+            {{- end }}
+            {{- if .Values.mongoOplogUrl.secretName }}
+            - name: MONGO_OPLOG_URL
+              valueFrom:
+                secretKeyRef:
+                  key: MONGO_OPLOG_URL
+                  name: {{ .Values.mongoOplogUrl.secretName }}
+            {{- end }}
+            {{- if .Values.meteorSettings.secretName }}
+            - name: METEOR_SETTINGS
+              valueFrom:
+                secretKeyRef:
+                  key: METEOR_SETTINGS
+                  name: {{ .Values.meteorSettings.secretName }}
+            {{- end }}        
         {{- range $key, $value := .Values.perfanaFe.env }}
             - name: {{ $key }}
               value: '{{ $value }}'
@@ -82,28 +103,40 @@ spec:
           resources:
 {{ toYaml .Values.perfanaFe.resources | indent 12 }}
           volumeMounts:
-          - name: dot-env
-            mountPath: /env/perfana-admin.secret.env
-            subPath: perfana-admin
-          - name: dot-env
-            mountPath: /env/perfana-super-admin.secret.env
-            subPath: perfana-super-admin
-          - name: dot-env
-            mountPath: /env/perfana-api.secret.env
-            subPath: perfana-api
-          - name: dot-env
-            mountPath: /env/perfana-mongo-urls.secret.env
-            subPath: perfana-mongo-urls  
+          - name: perfana-fe-secrets
+            mountPath: /secrets/perfana-fe-grafana-config-secret.yaml
+            subPath: perfana-fe-grafana-config-secret.yaml
+          - name: perfana-fe-secrets
+            mountPath: /secrets/perfana-fe-authentication-config-secret.yaml
+            subPath: perfana-fe-authentication-config-secret.yaml
+          - name: perfana-fe-secrets
+            mountPath: /secrets/perfana-fe-admin-creds-secret.yaml
+            subPath: perfana-fe-admin-creds-secret.yaml
+          - name: perfana-fe-secrets
+            mountPath: /secrets/perfana-fe-super-admin-creds-secret.yaml
+            subPath: perfana-fe-super-admin-creds-secret.yaml
+          - name: perfana-fe-secrets
+            mountPath: /secrets/perfana-api-creds-secret.yaml
+            subPath: erfana-api-creds-secret.yaml
+          - name: perfana-fe-secrets
+            mountPath: /secrets/perfana-mongo-urls-secret.env
+            subPath: perfana-mongo-urls-secret.env
+          - name: perfana-fe-meteor-settings
+            mountPath: /config/perfana-fe-meteor-settings.yaml
+            subPath: perfana-fe-meteor-settings.yaml   
       volumes:
-      - name: dot-env
+      - name: perfana-fe-meteor-settings
+        projected:
+          sources:
+          - configMap:
+              name: perfana-fe-meteor-settings
+      {{- if .Values.existingSecret }}
+      - name: perfana-fe-secrets
         projected:
           sources:
           - secret:
-              {{- if .Values.dotenvExistingSecret }}
-              name: {{ .Values.dotenvExistingSecret }}
-              {{ else }}
-              name: secret-dotenv
-              {{- end }}
+              name: {{ .Values.existingSecret }}       
+      {{- end }}
     {{- with .Values.perfanaFe.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
