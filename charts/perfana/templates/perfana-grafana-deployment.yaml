@@ -77,6 +77,9 @@ spec:
           - name: perfana-grafana-secrets
             mountPath: /secrets/perfana-grafana-mysql-secret.env
             subPath: perfana-grafana-mysql-secret.env
+          - name: perfana-grafana-secrets
+            mountPath: /secrets/perfana-grafana-postgres-secret.env
+            subPath: perfana-grafana-postgres-secret.env
       volumes:
       {{- if .Values.existingSecret }}
       - name: perfana-grafana-secrets
