@@ -1,15 +1,15 @@
 # perfana component values.
 
 
-#mongoUrl:
-#  secretName: mongo-url
-#  value:
-#mongoOplogUrl:
-#  secretName: mongo-url
-#  value:
-#meteorSettings:
-#  secretName: meteor-settings
-#  value:
+mongoUrl:
+  secretName:
+  value:
+mongoOplogUrl:
+  secretName:
+  value:
+meteorSettings:
+  secretName:
+  value:
 
 # If existingSecret exists, the chart will mount files from a secret. See readme.md for the required keys
 # existingSecret: perfana-secrets
