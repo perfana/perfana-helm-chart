@@ -117,7 +117,7 @@ spec:
             subPath: perfana-fe-super-admin-creds-secret.yaml
           - name: perfana-fe-secrets
             mountPath: /secrets/perfana-api-creds-secret.yaml
-            subPath: erfana-api-creds-secret.yaml
+            subPath: perfana-api-creds-secret.yaml
           - name: perfana-fe-secrets
             mountPath: /secrets/perfana-mongo-urls-secret.env
             subPath: perfana-mongo-urls-secret.env
