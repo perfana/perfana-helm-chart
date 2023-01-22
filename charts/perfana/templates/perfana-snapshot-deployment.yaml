@@ -53,7 +53,21 @@ spec:
           #   httpGet:
           #     path: /
           #     port: http
-          
+          env:
+          {{- if .Values.mongoUrl.secretName }}
+          - name: MONGO_URL
+            valueFrom:
+              secretKeyRef:
+                key: MONGO_URL
+                name: {{ .Values.mongoUrl.secretName }}
+                  {{- end }}
+          {{- range $key, $value := .Values.perfanaSnapshot.env }}
+          - name: {{ $key }}
+            value: '{{ $value }}'
+            {{- end }}
+          {{- range .Values.perfanaSnapshot.envFromSecrets }}
+          {{print "- " (. | toYaml | nindent 12 | trim) }}
+          {{- end }}
           resources:
 {{ toYaml .Values.perfanaSnapshot.resources | indent 12 }}
           volumeMounts:
