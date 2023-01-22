@@ -1,1 +1,3 @@
 .idea/   
+/charts/perfana/secrets/
+/charts/perfana/templates/perfana-secrets.yaml

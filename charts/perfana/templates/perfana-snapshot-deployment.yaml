@@ -64,6 +64,13 @@ spec:
               secretKeyRef:
                 key: MONGO_URL
                 name: {{ .Values.mongoUrl.secretName }}
+                  {{- end }}
+          {{- range $key, $value := .Values.perfanaSnapshot.env }}
+          - name: {{ $key }}
+            value: '{{ $value }}'
+            {{- end }}
+          {{- range .Values.perfanaSnapshot.envFromSecrets }}
+          {{print "- " (. | toYaml | nindent 12 | trim) }}
           {{- end }}
           {{- range $key, $value := .Values.perfanaSnapshot.env }}
           - name: {{ $key }}
@@ -71,6 +78,19 @@ spec:
           {{- end }}
           resources:
 {{ toYaml .Values.perfanaSnapshot.resources | indent 12 }}
+          volumeMounts:
+          - name: perfana-snapshot-secrets
+            mountPath: /secrets/perfana-mongo-urls-secret.env
+            subPath: perfana-mongo-urls-secret.env 
+      volumes:
+      {{- if .Values.existingSecret }}
+      - name: perfana-snapshot-secrets
+        projected:
+          sources:
+          - secret:
+              name: {{ .Values.existingSecret }}       
+      {{- end }}
+
     {{- with .Values.perfanaSnapshot.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

@@ -72,10 +72,27 @@ spec:
           {{- range .Values.perfanaGrafana.envFromSecrets }}
           {{print "- " (. | toYaml | nindent 12 | trim) }}
           {{- end }}
-
-
           resources:
 {{ toYaml .Values.perfanaGrafana.resources | indent 12 }}
+          volumeMounts:
+          - name: perfana-grafana-secrets
+            mountPath: /secrets/perfana-mongo-urls-secret.env
+            subPath: perfana-mongo-urls-secret.env
+          - name: perfana-grafana-secrets
+            mountPath: /secrets/perfana-grafana-mysql-secret.env
+            subPath: perfana-grafana-mysql-secret.env
+          - name: perfana-grafana-secrets
+            mountPath: /secrets/perfana-grafana-postgres-secret.env
+            subPath: perfana-grafana-postgres-secret.env
+      volumes:
+      {{- if .Values.existingSecret }}
+      - name: perfana-grafana-secrets
+        projected:
+          sources:
+          - secret:
+              name: {{ .Values.existingSecret }}       
+      {{- end }}
+
     {{- with .Values.perfanaGrafana.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

@@ -78,8 +78,8 @@ spec:
            periodSeconds: 10
            successThreshold: 1
            timeoutSeconds: 5
-          env: # ENV variables for your project
-            {{- if .Values.mongoUrl.secretName }}
+          env: # ENV variables for your project    
+          {{- if .Values.mongoUrl.secretName }}
             - name: MONGO_URL
               valueFrom:
                 secretKeyRef:
@@ -99,13 +99,48 @@ spec:
                 secretKeyRef:
                   key: METEOR_SETTINGS
                   name: {{ .Values.meteorSettings.secretName }}
-            {{- end }}
+            {{- end }}        
         {{- range $key, $value := .Values.perfanaFe.env }}
             - name: {{ $key }}
               value: '{{ $value }}'
         {{- end }}
           resources:
 {{ toYaml .Values.perfanaFe.resources | indent 12 }}
+          volumeMounts:
+          - name: perfana-fe-secrets
+            mountPath: /secrets/perfana-fe-grafana-config-secret.yaml
+            subPath: perfana-fe-grafana-config-secret.yaml
+          - name: perfana-fe-secrets
+            mountPath: /secrets/perfana-fe-authentication-config-secret.yaml
+            subPath: perfana-fe-authentication-config-secret.yaml
+          - name: perfana-fe-secrets
+            mountPath: /secrets/perfana-fe-admin-creds-secret.yaml
+            subPath: perfana-fe-admin-creds-secret.yaml
+          - name: perfana-fe-secrets
+            mountPath: /secrets/perfana-fe-super-admin-creds-secret.yaml
+            subPath: perfana-fe-super-admin-creds-secret.yaml
+          - name: perfana-fe-secrets
+            mountPath: /secrets/perfana-api-creds-secret.yaml
+            subPath: perfana-api-creds-secret.yaml
+          - name: perfana-fe-secrets
+            mountPath: /secrets/perfana-mongo-urls-secret.env
+            subPath: perfana-mongo-urls-secret.env
+          - name: perfana-fe-meteor-settings
+            mountPath: /config/perfana-fe-meteor-settings.yaml
+            subPath: perfana-fe-meteor-settings.yaml   
+      volumes:
+      - name: perfana-fe-meteor-settings
+        projected:
+          sources:
+          - configMap:
+              name: perfana-fe-meteor-settings
+      {{- if .Values.existingSecret }}
+      - name: perfana-fe-secrets
+        projected:
+          sources:
+          - secret:
+              name: {{ .Values.existingSecret }}       
+      {{- end }}
     {{- with .Values.perfanaFe.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

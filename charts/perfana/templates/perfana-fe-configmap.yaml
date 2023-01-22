@@ -1,0 +1,16 @@
+{{- if .Values.perfanaFe.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: perfana-fe-meteor-settings
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: perfana-fe
+    chart: {{ include "perfana.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+data:
+  perfana-fe-meteor-settings.yaml: | 
+  {{- (toYaml .Values.perfanaFe.configuration) | nindent 4 }}
+
+{{- end }}  

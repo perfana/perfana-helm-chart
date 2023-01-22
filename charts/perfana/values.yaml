@@ -1,7 +1,6 @@
 # perfana component values.
 
-# If secretName is non-empty, env variable MONGO_URL, MONGO_OPLOG_URL and METEOR_SETTINGS set by secret.
-# If value is non-empty, the secret is also created (otherwise the secret must be already deployed).
+
 mongoUrl:
   secretName: mongo-url 
   value:
@@ -12,9 +11,12 @@ meteorSettings:
   secretName: meteor-settings
   value:
 
+# If existingSecret exists, the chart will mount files from a secret. See readme.md for the required keys
+# existingSecret: perfana-secrets
+
 # optional image pull secret
-imagePullSecrets:
-  - name: regcred
+# imagePullSecrets:
+#   - name: regcred
 
 securityContext: {}
 containerSecurityContext: {}
@@ -24,7 +26,7 @@ perfanaFe:
   replicaCount: 1
   image:
     repository: perfana/perfana-fe
-    tag: perfana-2.4.1
+    tag: perfana-2.4.3
     pullPolicy: Always
   deploymentStrategy: RollingUpdate
   service:
@@ -66,13 +68,81 @@ perfanaFe:
   serviceAccount:
     enabled: false
     name: perfana-fe
+  configuration:
+    # https://docs.perfana.io/docs/settings/settings.html#organisations
+    # organisations:
+    # - name: Perfana
+    #   description: Perfana
+    
+    # https://docs.perfana.io/docs/settings/settings.html#perfana-url
+    perfanaUrl: "https://perfana.myhost.com"
+
+    # https://docs.perfana.io/docs/settings/settings.html#perfana-check-url  
+    perfanaCheckUrl: "http://perfana-check:9191"   
+    
+    # https://docs.perfana.io/docs/settings/settings.html#auto-compare-testruns
+    autoCompareTestRuns: true
+    
+    # https://docs.perfana.io/docs/settings/settings.html#auto-set-baseline-testrun
+    autoSetBaselineTestRun: false
+ 
+    # https://docs.perfana.io/docs/settings/settings.html#helmet-framesrc
+    helmet:
+      frameSrc:
+      - "https://*.myhost.com"
+
+    # https://docs.perfana.io/docs/settings/settings.html#login-expiration-in-days
+    loginExpirationInDays: 1
+
+    # https://docs.perfana.io/docs/settings/settings.html#retention-settings
+    prometheusRetention: 2592000
+    influxDbRetention: 2592000
+    elasticSearchRetention: 2592000
+    snapshotExpires: 7776000
+
+
+    public:
+    # https://docs.perfana.io/docs/settings/settings.html#forbid-client-account-creation
+      forbidClientAccountCreation: false  
+    
+    # https://docs.perfana.io/docs/settings/settings.html#perfana-url-1
+      perfanaUrl: "https://perfana.myhost.com"   
+    
+    # https://docs.perfana.io/docs/settings/settings.html#jaeger-url  
+      # jaegerUrl: "https://jaeger.myhost.com"
+    
+    # https://docs.perfana.io/docs/settings/settings.html#jaeger-limit
+      # jaegerLimit: 500
+    
+    # https://docs.perfana.io/docs/settings/settings.html#pyroscope-url  
+      # pyroscopeUrl: "https://pyroscope.myhost.com"
+    
+    # https://docs.perfana.io/docs/settings/settings.html#override-login-button-text  
+      # overrideLoginButtonText: "My company Login"
+    
+    # https://docs.perfana.io/docs/settings/settings.html#google-sign-in  
+      # googleSignIn: true
+
+    # https://docs.perfana.io/docs/settings/settings.html#custom-alert-tags
+    # customAlertTags:
+    # - key: application
+    #   value: perfana-applications
+    # - key: namespace
+    #   value: perfana-test-environment     
+
+    # https://docs.perfana.io/docs/settings/settings.html#omit-alert-tags
+    # omitAlertTags:
+    # - alertSource: alertmanager
+    #   tag: kubernetes_pod_name
+    # - alertSource: alertmanager
+    #   tag: node  
 
 perfanaGrafana:
   enabled: true
   replicaCount: 1
   image:
     repository: perfana/perfana-grafana
-    tag: perfana-2.4.1
+    tag: perfana-2.4.3
     pullPolicy: Always
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
@@ -91,14 +161,14 @@ perfanaGrafana:
   ## Sync interval
   env:
     SYNC_INTERVAL: 30000  # 30 seconds
-    MYSQL_HOST: mysql-headless
-    MYSQL_USER: grafana
-  envFromSecrets:
-  - name: MYSQL_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        key: mysql-password
-        name: mysql-credentials
+  #   MYSQL_HOST: mysql-headless
+  #   MYSQL_USER: grafana
+  # envFromSecrets:
+  # - name: MYSQL_PASSWORD
+  #   valueFrom:
+  #     secretKeyRef:
+  #       key: mysql-password
+  #       name: mysql-credentials
   serviceAccount:
     enabled: false
     name: perfana-grafana
@@ -108,7 +178,7 @@ perfanaCheck:
   replicaCount: 1
   image:
     repository: perfana/perfana-check
-    tag: perfana-2.4.1
+    tag: perfana-2.4.3
     pullPolicy: Always
   labels: {}
   annotations: {}
@@ -143,7 +213,7 @@ perfanaSnapshot:
   replicaCount: 1
   image:
     repository: perfana/perfana-snapshot
-    tag: perfana-2.4.1
+    tag: perfana-2.4.3
     pullPolicy: Always
   resources: {}
     # We usually recommend not to specify default resources and to leave this as a conscious
