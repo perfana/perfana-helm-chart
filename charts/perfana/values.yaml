@@ -204,6 +204,7 @@ perfanaCheck:
   env: 
     SPRING_PROFILES_ACTIVE: "prd"
     JAVA_TOOL_OPTIONS: -Dlogging.level.root=INFO
+    SPRING_CONFIG_IMPORT: optional:file:/secrets/mongodb.properties
   serviceAccount:
     enabled: false
     name: perfana-check

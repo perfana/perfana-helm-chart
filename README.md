@@ -64,8 +64,8 @@ stringData:
         - "groups"
 
   perfana-mongo-urls-secret.env: |
-    MONGO_URL=mongodb://perfana:${MONGO_PASSWORD}@mongodb-headless:27017/perfana?authSource=perfana&replicaSet=rs0
-    MONGO_OPLOG_URL=mongodb://root:${MONGO_PASSWORD}r@mongodb-headless:27017/local?authSource=admin&replicaSet=rs0
+    MONGO_URL=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongodb-headless:27017/perfana?authSource=perfana&replicaSet=rs0
+    MONGO_OPLOG_URL=mongodb://${MONGO_USER}:${MONGO_PASSWORD}r@mongodb-headless:27017/local?authSource=admin&replicaSet=rs0
 
   perfana-grafana-mysql-secret.env: |
     MYSQL_HOST=mysql-headless
@@ -76,6 +76,9 @@ stringData:
     PG_HOST=postgres-headless
     PG_USER=grafana
     PG_PASSWORD=${PG_PASSWORD}
+
+  perfana-check-mongodb.properties: |
+    spring.data.mongodb.uri=mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongodb-headless.perfana:27017/perfana?replicaSet=rs0
 ```
 
 > **Important**: make sure to end all YAML files wit a newline! 

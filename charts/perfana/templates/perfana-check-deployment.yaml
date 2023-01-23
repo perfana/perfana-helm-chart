@@ -75,6 +75,18 @@ spec:
           {{- end }}
           resources:
 {{ toYaml .Values.perfanaCheck.resources | indent 12 }}
+          volumeMounts:
+            - name: perfana-check-secrets
+              mountPath: /secrets/mongodb.properties
+              subPath: perfana-check-mongodb.properties
+      volumes:
+      {{- if .Values.existingSecret }}
+        - name: perfana-check-secrets
+          projected:
+            sources:
+              - secret:
+                  name: {{ .Values.existingSecret }}
+      {{- end }}
     {{- with .Values.perfanaCheck.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}
