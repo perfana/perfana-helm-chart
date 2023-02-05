@@ -123,6 +123,12 @@ spec:
             mountPath: /secrets/perfana-api-creds-secret.yaml
             subPath: perfana-api-creds-secret.yaml
           - name: perfana-fe-secrets
+            mountPath: /secrets/perfana-fe-dynatrace-secret.yaml
+            subPath: perfana-fe-dynatrace-secret.yaml
+          - name: perfana-fe-secrets
+            mountPath: /secrets/perfana-fe-jira-secret.yaml
+            subPath: perfana-fe-jira-secret.yaml
+          - name: perfana-fe-secrets
             mountPath: /secrets/perfana-mongo-urls-secret.env
             subPath: perfana-mongo-urls-secret.env
           - name: perfana-fe-meteor-settings
