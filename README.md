@@ -1,3 +1,11 @@
+> _*This repository is archived. Please, use this repository:*_ https://github.com/perfana/helm-charts
+
+When using the new one make sure to remove the existing `perfana` repo in your helm setup first:
+
+```sh
+helm repo remove perfana
+```
+
 # perfana-helm-chart
 
 ## Usage
