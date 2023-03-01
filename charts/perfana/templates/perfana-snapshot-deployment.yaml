@@ -79,10 +79,18 @@ spec:
           resources:
 {{ toYaml .Values.perfanaSnapshot.resources | indent 12 }}
           volumeMounts:
+          {{- if .Values.perfanaSnapshot.volumeMounts }}
+             {{- toYaml .Values.perfanaSnapshot.volumeMounts | nindent 10 }}
+          {{- end }}
+          {{- if .Values.existingSecret }}
           - name: perfana-snapshot-secrets
             mountPath: /secrets/perfana-mongo-urls-secret.env
             subPath: perfana-mongo-urls-secret.env 
+          {{- end }}
       volumes:
+      {{- if .Values.perfanaSnapshot.volumes }}
+         {{- toYaml .Values.perfanaSnapshot.volumes | nindent 6 }}
+      {{- end }}
       {{- if .Values.existingSecret }}
       - name: perfana-snapshot-secrets
         projected:
